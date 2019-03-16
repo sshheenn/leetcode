@@ -1,0 +1,79 @@
+/*
+给定一个整数数组，你需要寻找一个连续的子数组，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+
+你找到的子数组应是最短的，请输出它的长度。
+
+示例 1:
+
+输入: [2, 6, 4, 8, 10, 9, 15]
+输出: 5
+解释: 你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+说明 :
+
+输入的数组长度范围在 [1, 10,000]。
+输入的数组可能包含重复元素 ，所以升序的意思是<=。
+在真实的面试中遇到过这道题？
+*/
+
+思路1：把数组复制下来，然后排序，用排序后的数组和原来的数组进行比较，
+从左边起第一个不相等的数就是无序子数组的起点，从右边开始第一个不相等
+的数就是无序子数组的终点
+
+
+class Solution {
+    public int findUnsortedSubarray(int[] nums) {
+        int[] list = Arrays.copyOf(nums,nums.length);
+        Arrays.sort(list);
+        int i = 0;
+        int j = nums.length - 1;
+        for(; i < nums.length; i++){
+            if(nums[i] != list[i])break;
+        }
+        
+        for(; j >= i; j--){
+            if(nums[j] != list[j])break;
+        }
+        
+        if(i == j) return 0;
+        
+        return (j - i + 1);
+    }
+}
+
+
+思路2：动态规划的思路，就是利用双向检测，从左边起，记录遍历过的数中的最大的数，
+只要右边还有数比这个最大的数小，就说明无序子数组的结束位置还在右边。同理，从右边
+往左边遍历，记录遍历过的最小的数，只要左边还有数比这个最小的数大，说明无序子数组
+的起点还在左边
+
+
+class Solution {
+    public int findUnsortedSubarray(int[] nums) {
+        if(nums == null || nums.length == 0)
+        return 0;
+        
+        int start = 0;
+        int end = -1;
+        int left = nums[0];
+        int right = nums[nums.length - 1];
+        for(int i = 1; i < nums.length; i++){
+            if(left > nums[i]){
+                end = i;
+            }
+            else{
+                left = nums[i];
+            }
+            
+            if(right < nums[nums.length - i - 1]){
+                start = nums.length - i - 1;
+            }
+            else {
+                right = nums[nums.length - i - 1];
+            }
+        }
+        
+        return end - start + 1;
+    }
+}
+
+
