@@ -1,0 +1,98 @@
+/*
+给定两个数组，编写一个函数来计算它们的交集。
+
+示例 1:
+
+输入: nums1 = [1,2,2,1], nums2 = [2,2]
+输出: [2]
+示例 2:
+
+输入: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+输出: [9,4]
+说明:
+
+输出结果中的每个元素一定是唯一的。
+我们可以不考虑输出结果的顺序。
+*/
+
+/*
+思路1：利用set存储的数据具有唯一性，也就是一个相同的数只能存一个的特点，用它来存储其中一个数组，然后遍历另一个数组，找到set中包含有数组中
+的数，为了防止重复，删除set中已经查找到的数
+*/
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        int l1 = nums1.length;
+        int l2 = nums2.length;
+        
+        Set<Integer> set = new HashSet<>();
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0; i < l1; i ++){
+            set.add(nums1[i]);
+        }
+        
+        for(int i = 0; i < l2; i ++){
+            if(set.contains(nums2[i])){
+                res.add(nums2[i]);
+                set.remove(nums2[i]);
+            }
+        }
+        int[] ret = new int[res.size()];
+        for(int i = 0; i < res.size();i++){
+            ret[i] = res.get(i);
+        }
+        return ret;
+    }
+}
+
+/*
+思路2：该种方法是通过寻找2个数组中的最大值，然后创建一个长度为最大值的整数数组，这样数组中的每个数都有一个等大的坐标，
+然后遍历数组1，将遍历到的数的对应坐标的值设置为1，然后遍历数组2，将遍历到的数的对应坐标的数如果为1就设置为2（说明第一个数组
+也存在该数），最后遍历这个新的数组，值为2的对应的坐标就是两个数组的交集（该方法只适用于数组中的数皆为正整数的情况）
+
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        int l1 = nums1.length;
+        int l2 = nums2.length;
+        if(l1 == 0 || l2 == 0){
+            return new int[0];
+        }
+        int max = Integer.MIN_VALUE;
+        for(int i = 0; i < l1; i ++){
+          
+            if(nums1[i] > max){
+                max = nums1[i];
+            }
+        }
+        
+        for(int i = 0; i < l2; i ++){
+           
+            if(nums2[i] > max){
+                max = nums2[i];
+            }
+        }
+        
+       int count = 0;
+        int[] book = new int[max + 1];
+        for(int i = 0; i < l1; i ++){
+            if(book[nums1[i]] == 0){
+                book[nums1[i]] = 1;
+            }
+        }
+        
+        for(int i = 0; i < l2; i ++){
+            if(book[nums2[i]] == 1){
+                book[nums2[i]] = 2;
+                count ++;
+            }
+        }
+        
+        int[] res = new int[count];
+        for(int i = 0,j = 0; i < max + 1; i ++){
+            if(book[i] == 2){
+                res[j ++] = i;
+            }
+        }
+       return res; 
+    }
+}
+*/
