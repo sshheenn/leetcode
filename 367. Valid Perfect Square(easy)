@@ -1,0 +1,40 @@
+/*
+给定一个正整数 num，编写一个函数，如果 num 是一个完全平方数，则返回 True，否则返回 False。
+
+说明：不要使用任何内置的库函数，如  sqrt。
+
+示例 1：
+
+输入：16
+输出：True
+示例 2：
+
+输入：14
+输出：False
+
+*/
+
+/*
+思路：二分法，用先求出原来正整数的一半m，然后判断num/m 是否等于m，需要注意的是因为num和m都是整数，可能会有num/m取整刚好是m的情况，
+所以先让num*1.0，让它变成浮点数，这样如果相等的话，就说明原来的整数为有效的完全平方数。
+*/
+class Solution {
+    public boolean isPerfectSquare(int num) {
+        int l = 0;
+        int r = num;
+        while(l <= r){
+            int m = l + (r - l)/2;
+            if(m == num*1.0/m){
+                return true;
+            }
+            
+            else if(m > num*1.0/m){
+                r = m - 1;
+            }
+            else{
+                l = m + 1;
+            }
+        }
+        return false;
+    }
+}
