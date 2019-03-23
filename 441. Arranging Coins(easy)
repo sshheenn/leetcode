@@ -1,0 +1,63 @@
+/*
+给定一个数字 n，找出可形成完整阶梯行的总行数。
+
+n 是一个非负整数，并且在32位有符号整型的范围内。
+
+示例 1:
+
+n = 5
+
+硬币可排列成以下几行:
+¤
+¤ ¤
+¤ ¤
+
+因为第三行不完整，所以返回2.
+示例 2:
+
+n = 8
+
+硬币可排列成以下几行:
+¤
+¤ ¤
+¤ ¤ ¤
+¤ ¤
+
+因为第四行不完整，所以返回3.
+*/
+
+
+/*
+思路1：利用二分法查找
+*/
+class Solution {
+    public int arrangeCoins(int n) {
+        if(n == 0) { 
+            return 0;
+        }
+        long low = 1;
+        long high = n; 
+        while(low <= high) { 
+            long mid = low + (high-low)/2; 
+            long sum = (mid+1)*mid/2; 
+            if(sum <= n) {
+                low = mid +1;
+            } else {
+                high = mid -1; 
+            } 
+        } 
+        return (int)low-1;
+    }
+}
+
+/*
+思路二：利用数学公式，根据刚好是完整的x阶阶梯可得(x+1)*x/2 == n，易得x == (-1 + Math.sqrt(1 + 8 *(long)n))/2，因为n个硬币总能得到刚好x阶
+或者x阶多一些，但又构不成下一阶，所以取整时会约掉，x就是所求的结果
+*/
+
+class Solution {
+    public int arrangeCoins(int n) {
+        long res = (long)(-1 + Math.sqrt(1 + 8 * (long)n)) / 2;
+        return (int)res;
+    }
+}
