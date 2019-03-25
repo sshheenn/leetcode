@@ -1,0 +1,54 @@
+/*
+实现 pow(x, n) ，即计算 x 的 n 次幂函数。
+
+示例 1:
+
+输入: 2.00000, 10
+输出: 1024.00000
+示例 2:
+
+输入: 2.10000, 3
+输出: 9.26100
+示例 3:
+
+输入: 2.00000, -2
+输出: 0.25000
+解释: 2-2 = 1/22 = 1/4 = 0.25
+*/
+
+/*
+思路一：递归的方法，因为当n是最小负数的时候，取绝对值时会出现越界，所以需要另外定义一个函数作为递归函数
+*/
+
+class Solution {
+    public double myPow(double x, int n) {
+        return count(x,(long)n);
+    }
+    
+    public double count(double x, long n){
+        if(n == 0) return 1;
+        if(n == 1) return x;
+        if(n < 0)  return count(1/x, -n);
+        if(n == 2) return x * x;
+        if(n % 2 == 0) return count(count(x,n/2),2);
+        else return x * count(count(x,(n-1)/2),2);
+    }
+}
+
+
+/*
+思路二：非递归的方法，这是另外的一种二分法的表示方法，比如2^8，可以表示为(((2^2)^2)^2)，因为每次都是在前一次的结果上取平方的，所以次数会直接减半
+*/
+
+class Solution {
+    public double myPow(double x, int n) {
+        double res = 1.0;
+        for(int i = n; i != 0; i /= 2){
+            if(i % 2 != 0){
+                res *= x;
+            }
+            x *= x;
+        }
+        return n < 0 ? 1 / res : res;
+    }
+}
